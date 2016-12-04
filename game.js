@@ -45,7 +45,9 @@ var wallRight = Bodies.rectangle(630, 480, 100, 960, {isStatic:true});
 var wallLeft = Bodies.rectangle(-30, 480, 100, 960, {isStatic:true});
 var spawner = Bodies.rectangle(0, 0, 20, 40, {isStatic: true});
 var colliderTop = Bodies.rectangle(300, 0, 600, 50, {isStatic: true, isSensor: true});
-var colliderA = Bodies.rectangle(300, 800, 50, 20, {isStatic: true, isSensor: true});
+var collider100 = Bodies.rectangle(300, 800, 50, 20, {isStatic: true, isSensor: true});
+var colliderPoison = Bodies.rectangle(220, 800, 50, 20, {isStatic: true, isSensor: true});
+var colliderPoison2 = Bodies.rectangle(380, 800, 50, 20, {isStatic: true, isSensor: true});
 var spinnerA = Bodies.rectangle(270, 480, 45, 10, {isStatic:true});
 var spinnerB = Bodies.rectangle(330, 480, 45, 10, {isStatic:true});
 var spinnerC = Bodies.rectangle(270, 560, 45, 10, {isStatic:true});
@@ -56,7 +58,7 @@ var spinnerE = Bodies.rectangle(180, 300, 120, 10, {isStatic:true});
 var concaveTriangle = Bodies.fromVertices(300, 600, [{ x: 0, y: 0 }, { x: 300, y:100 }, { x: 600, y: 0 }, { x: 600, y: 200 }, { x: 0, y: 200 }], {isStatic: true, friction: 0, restitution: 0}, [flagInternal=false], [removeCollinear=0.01], [minimumArea=10]);
 var ground = Bodies.circle(300, 1450, 600, { isStatic: true, friction:0, restitution:0 });
 
-World.add(engine.world, [ wallRight, wallLeft, spawner, ground, colliderTop, colliderA, spinnerA, spinnerB, spinnerC, spinnerD, spinnerE]);
+World.add(engine.world, [ wallRight, wallLeft, spawner, ground, colliderTop, collider100, colliderPoison, colliderPoison2, spinnerA, spinnerB, spinnerC, spinnerD, spinnerE]);
 // run the engine
 Engine.run(engine); 
 // run the renderer
@@ -65,6 +67,15 @@ Render.run(render);
 engine.world.gravity.y = 1;
 
 // *****************************
+
+var Ball = Bodies.circle(spawner.position.x, 80, 5, {restitution: .5, continuous: 2, friction:0, render: {
+				fillStyle: '#65f1ff', 
+				strokeStyle: '#65f1ff', // blue #65f1ff
+				lineWidth: 0
+				}}); // (x, y, radius)
+			Matter.Composite.add(engine.world, [Ball]);
+
+
 
 function createElevators(){
 	var elevatorY = 0;
@@ -127,6 +138,7 @@ function clickListener(){
 };
 
 
+
 // create static pins
 function createPins(){
 
@@ -164,6 +176,12 @@ function createPins(){
 	}
 }
 
+//temp
+function deleteBall(){
+	Matter.Composite.remove(engine.world, [ball]);
+}
+
+
 // detect collisions
 Matter.Events.on(engine, 'collisionStart', function(event) {
 	var pairs = event.pairs;
@@ -173,19 +191,27 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
 	for (var i = 0, j = pairs.length; i != j; ++i) {
 		var pair = pairs[i];
 
-		if (pair.bodyA === colliderA) {
+		if (pair.bodyA === collider100) { // if spawned ball collides with collider100
 			hitCountA++;
-			colliderA.render.fillStyle = '#65f1ff';
-			colliderA.render.strokeStyle = '#65f1ff';
+			collider100.render.fillStyle = '#65f1ff';
+			collider100.render.strokeStyle = '#65f1ff';
 			playAudioSuccess();
 			console.log('hitCountA: ' + hitCountA);
 		}
 		else{
-			colliderA.render.fillStyle = 'white';
-			colliderA.render.strokeStyle = 'white';
+			collider100.render.fillStyle = 'white';
+			collider100.render.strokeStyle = 'white';
 		}
-		// add points to hitCountB
-		if (pair.bodyA === colliderTop) {
+
+		if (pair.bodyA === colliderPoison) { // if spawned ball collides with colliderPoison
+			deleteBall();
+		}
+		// else{
+		// 	collider100.render.fillStyle = 'white';
+		// 	collider100.render.strokeStyle = 'white';
+		// }
+		
+		if (pair.bodyA === colliderTop) { // if spawned ball collides with top bar, replenish balls 
 			ballCounter++;
 			playAudioThud();
 			console.log('ballCounter: ' + ballCounter);
@@ -211,9 +237,9 @@ $('#coinDiv').html('Balls ' + ballCounter);
 
 $('#restartGameDiv').on('click', function(e) {
 	e.preventDefault();
-	$('#restartGameDiv').hide();
+	$('#restartGameDiv').fadeOut();
+	playAudioSuccess()
 });
-
 
 
 function init(){
