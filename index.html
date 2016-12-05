@@ -19,16 +19,32 @@
 	</audio>
 
 	<div id = "topBar">
+		<h3>COINDROP</h3>
 		<div id = "scoreDiv">
 		</div>
 		<div id = "coinDiv">
 		</div>
 	</div>
+	<div id = "recent-scores">
+		<h2>RECENT SCORES</h2>
+	</div>
+	<div id = "top-scores">
+		<h2>TOP SCORES</h2>
+	</div>
+
+	<div id = "myCanvas"></div>
 
 	<div id = "restartGameDiv">
-		<h1>FALLING</h1>
+		<h1>COINDROP</h1>
 		<p>Tap the screen to release a ball. Aim for buckets to score and avoid traps. Elevators on sides will replenish balls. Play until balls are gone.</p>
 		<div id = "restartButton">Tap to start</div>
+	</div>
+
+	<div id = "outOfCoins">
+		<p2>Game Over. You are out of coins.<br>Enter Name</p2>
+		<form>
+			<input type="text" id="score" name="fname">
+		</form>
 	</div>
 
 	<script src="build/matter.js"></script>
