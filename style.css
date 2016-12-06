@@ -9,12 +9,17 @@ body {
 }
 
 canvas {
-	display: -webkit-box;
-	max-width: 100vw;
-	max-height: 85vh;
-	margin: auto;
-	margin-top: 20px;
-	border: 3px solid #65f1ff;
+    display: block;
+    position: absolute;
+    max-width: 100vw;
+    max-height: 85vh;
+    margin: auto;
+    margin-top: 20px;
+    border: 3px solid #65f1ff;
+    top: 45px;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 #topBar {
 	width: 100%;
@@ -45,10 +50,12 @@ canvas {
 	left: 0;
 	bottom: 0;
 	right: 0;
-	max-width: 391px;
-	max-height: 626px;
+    max-width: 386px;
+	max-height: 516px;
 	margin: auto;
 	opacity: .9;
+	
+
 }
 #restartButton {
 	text-align: center;
@@ -56,12 +63,12 @@ canvas {
 	color: white;
 	height: 100px;
 	position: absolute;
-	top: 0;
+    top: 65px;
 	left: 0;
 	bottom: 0;
 	right: 0;
 }
-#outOfCoins {
+#modal {
 	display: none;
 	background: #2b2b2b;
 	position: absolute;

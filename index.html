@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700" rel="stylesheet">
 	<title>JavaScript Physics Game</title>
 
@@ -28,29 +27,47 @@
 	<div id = "recent-scores">
 		<h2>RECENT SCORES</h2>
 	</div>
+	<canvas id = "myCanvas">
+	</canvas>
 	<div id = "top-scores">
 		<h2>TOP SCORES</h2>
+		<ul class = "user-list">
+		</ul>
 	</div>
-
-	<div id = "myCanvas"></div>
 
 	<div id = "restartGameDiv">
 		<h1>COINDROP</h1>
 		<p>Tap the screen to release a ball. Aim for buckets to score and avoid traps. Elevators on sides will replenish balls. Play until balls are gone.</p>
-		<div id = "restartButton">Tap to start</div>
+		<div id = "restartButton">Tap to start
+		</div>
 	</div>
 
-	<div id = "outOfCoins">
+	<div id = "modal">
 		<p2>Game Over. You are out of coins.<br>Enter Name</p2>
-		<form>
-			<input type="text" id="score" name="fname">
+		<form id="score-form">
+			<input type="text" id="user-name" name="fname">
 		</form>
 	</div>
 
-	<script src="build/matter.js"></script>
+
+	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<!-- Firebase CDN -->
+  	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"></script>
+
+	<!-- Matter.js -->
+  	<script src="build/matter.js"></script>
+	
+	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	
+	<!-- js -->
 	<script src="game.js" type="text/javascript" charset="utf-8"></script>
+
 
 </body>
 </html>

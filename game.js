@@ -1,4 +1,72 @@
 
+//firebase
+  // Initialize Firebase
+  var config = {
+  	apiKey: "AIzaSyDs_psHy8ODUPpLXYJcQsyCZxZ-77A5NdE",
+  	authDomain: "cooindrop.firebaseapp.com",
+  	databaseURL: "https://cooindrop.firebaseio.com",
+  	storageBucket: "cooindrop.appspot.com",
+  	messagingSenderId: "719139779180"
+  };
+  firebase.initializeApp(config);
+
+// connect to your Firebase application using your reference URL
+var messageAppReference = firebase.database();
+var messagesReference = firebase.database().ref('users');
+$(document).ready(function() {
+	console.log(firebase);
+	$('#score-form').submit(function(event) { // post users and scores to firebase
+		event.preventDefault();
+        //grab user's message
+        var userName = $('#user-name').val();
+        //clear the message input fields
+        $('#user-name').val("");
+        $('#modal').fadeOut();
+        // console.log(message);
+        // send message to firebase
+        messagesReference.push({
+        	name: userName,
+        	score: score
+        });
+    });
+
+	var messageClass = (function() {
+		function getFanMessages() {
+		//private function
+		messageAppReference.ref("users").on("value", function(results){
+			var messages = [];
+			var $messageBoard = $('.user-list');
+			var allMessages = results.val();
+			for (var msg in allMessages) {
+				console.log(results);
+				var name = allMessages[msg].name;
+				var votes = allMessages[msg].score;
+				var $messageListElement = $('<li></li>');
+				$messageListElement.html(name);
+				$messageListElement.append('<div class="pull-right">' + votes + '</div>');
+
+				messages.push($messageListElement);
+			}
+			$messageBoard.empty();
+			for (var element in messages) {
+				$messageBoard.append(messages[element]);
+			}
+		});
+	}
+	return {
+		updateFanMessages: getFanMessages
+	}
+})();
+messageClass.updateFanMessages();
+});
+
+
+
+
+
+
+
+// Matter.js start ***************
 // module aliases
 var Engine = Matter.Engine,
 Render = Matter.Render,
@@ -23,8 +91,8 @@ var engine = Engine.create({
 
 // create a renderer
 var render = Render.create({
-	element: document.body,
-	//canvas: document.querySelector('#myCanvas'),
+	//element: document.body,
+	canvas: document.querySelector('#myCanvas'),
 	engine: engine,
 	options: {
 		background:"#2b2b2b",
@@ -141,7 +209,7 @@ function clickListener(){
 
 		if (ballCounter <= 0){
 			console.log('game over');
-			$('#outOfCoins').fadeIn();
+			$('#modal').fadeIn();
 		}
 
 		console.log(ballCounter);
