@@ -29,13 +29,16 @@ canvas {
     width: 100px;
     display: inline-block;
 }
-#coinDiv {
+.coinDiv {
     text-align: left;
     padding: 5px 10px;
     font-size: 18px;
     font-weight: bold;
     width: 100px;
     display: -webkit-inline-box;
+}
+.red {
+	color:red;
 }
 .introText {
 	width: 330px;
@@ -152,8 +155,6 @@ input {
 	width: 50px;
 	margin: 20px;
 }
-
-
 
 
 

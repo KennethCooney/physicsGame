@@ -28,6 +28,10 @@ $(document).ready(function() {
         	name: userName, // create name node
         	score: score // create score node
         });
+
+        //reset game vars
+		score = 0;
+		ballCounter = 5;
     });
 
 
@@ -217,8 +221,11 @@ function clickListener(){
 
 		if (ballCounter === 0){
 			$('#modal').fadeIn();
+			$('.coinDiv').removeClass('red');
 		}
+
 		else if (ballCounter > 0){
+			$('.coinDiv').removeClass('red');
 			ballCounter -= 1;
 			playAudioPop();
 			console.log(ballCounter)
@@ -235,6 +242,10 @@ function clickListener(){
 					Matter.Composite.remove(engine.world, [ball]);
 				};
 			});
+		}
+		if (ballCounter === 1){
+			console.log('is 1')
+				$('.coinDiv').addClass('red');
 		}
 
 	});
@@ -288,14 +299,14 @@ function createPins(){
 Matter.Events.on(engine, 'collisionStart', function(event) {
 	var pairs = event.pairs;
 	$('#scoreDiv').html('Score ' + score);
-	$('#coinDiv').html('Coins ' + ballCounter); 
+	$('.coinDiv').html('Coins ' + ballCounter); 
 
 	for (var i = 0, j = pairs.length; i != j; ++i) {
 		var pair = pairs[i];
 
 		if (pair.bodyA === collider100) { // if spawned ball collides with collider100
 			score += 100;
-			ballCounter += 5;
+			ballCounter += 3;
 			collider100.render.fillStyle = '#65f1ff';
 			collider100.render.strokeStyle = '#65f1ff';
 			playAudioSuccess();
@@ -352,7 +363,7 @@ function playAudioThud(){
 
 //$('#scoreDiv').html('Score ');
 $('#scoreDiv').html('Score ' + score);
-$('#coinDiv').html('Coins ' + ballCounter);
+$('.coinDiv').html('Coins ' + ballCounter);
 
 $('#restartGameDiv').on('click', function(e) {
 	e.preventDefault();
@@ -367,7 +378,7 @@ $('#restartGameDiv').on('click', function(e) {
 function init(){
 	createPins();
 	clickListener();
-	//animateSpawner();
+	animateSpawner();
 	createElevatorsY();
 };
 
