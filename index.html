@@ -1,7 +1,7 @@
-<!DOCTYPE html>
 <html>
 <head>
-	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700" rel="stylesheet">
+	<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<title>COINDROP</title>
 
 </head>
@@ -17,17 +17,16 @@
 	</div>
 	<div class = "container">
 		<div class = "row">
-			<div class = "col-md-4">
-			</div>
-			<div class = "col-md-4">
+			
+			<div class = "col-md-6">
 				<canvas id = "myCanvas">
 				</canvas>
 			</div>
-			<div class = "col-md-4">
+			<div class = "col-md-6">
 				<div id = "top-scores">
 					<h2>TOP SCORES</h2>
-					<ul class = "user-list">
-					</ul>
+					<table class = "user-list">
+					</table>
 				</div>
 			</div>
 		</div>
@@ -46,36 +45,32 @@
 			<input type="text" id="user-name" name="fname" maxlength="3">
 		</form>
 	</div>
-	
 
-	<audio id="audioSuccess">
-		<source src="audio/success.ogg" type="audio/ogg">
-		</audio>
-		<audio id="audioPop">
-			<source src="audio/pop.ogg" type="audio/ogg">
-			</audio>
-			<audio id="audioThud">
-				<source src="audio/hover.ogg" type="audio/ogg">
-				</audio>
+</body>
 
-				<!-- css -->
-				<link rel="stylesheet" type="text/css" href="style.css">
+<!-- audio -->
+<audio id="audioSuccess"><source src="audio/success.ogg" type="audio/ogg"></audio>
+<audio id="audioPop"><source src="audio/pop.ogg" type="audio/ogg"></audio>
+<audio id="audioThud"><source src="audio/hover.ogg" type="audio/ogg"></audio>
 
-				<!-- Firebase CDN -->
-				<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
-				<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"></script>
-				<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"></script>
-				<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"></script>
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="style.css">
 
-				<!-- Matter.js -->
-				<script src="build/matter.js"></script>
+<!-- fonts -->
+<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700" rel="stylesheet">
 
-				<!-- JQuery -->
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"></script>
 
-				<!-- js -->
-				<script src="game.js" type="text/javascript" charset="utf-8"></script>
+<!-- Matter.js -->
+<script src="build/matter.js"></script>
 
 
-			</body>
-			</html>
+
+<!-- js -->
+<script src="game.js" type="text/javascript" charset="utf-8"></script>
+
+</html>

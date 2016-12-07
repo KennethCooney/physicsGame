@@ -31,9 +31,6 @@ $(document).ready(function() {
     });
 
 
-//	var myUserId = firebase.auth().currentUser;
-//	var topUserPostsRef = firebaseRef.orderByChild('score');
-
 	// get user names and scores and post to DOM
 	var messageClass = (function() {
 		function getUserNamesScores() {
@@ -51,18 +48,19 @@ $(document).ready(function() {
 			// Sort the messages by score
 			allMessages = allMessages.sort(function(a,b) {return (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0);} ); 
 			
-			// Loops through and adds them to the page
+			//only show top 10 of array
+			allMessages = allMessages.slice(0,10);
+
+			// Loop through array and add items to page
 			allMessages.forEach(function(message){
 				var name = message.name;
-				var votes = message.score;
-				var $messageListElement = $('<li></li>');
-				$messageListElement.html(name);
-				$messageListElement.append('<div class="score-column">' + votes + '</div>');
+				var score = message.score;
+				var $messageListElement = $('<tr><td></td></tr>');
+				$messageListElement.html('<td class = "name-column">' + name + '</td>');
+				$messageListElement.append('<td class="score-column">' + score + '</td>');
 
 				messages.push($messageListElement);
-				
-			})
-				//console.log(results);
+			});
 		
 			$messageBoard.empty();
 			for (var element in messages) {
@@ -120,8 +118,8 @@ var render = Render.create({
 Matter.Render.run(render)
 
 // create objects and add to World
-var wallRight = Bodies.rectangle(650, 480, 100, 960, {isStatic:true});
-var wallLeft = Bodies.rectangle(-50, 480, 100, 960, {isStatic:true});
+var wallRight = Bodies.rectangle(650, 482, 100, 960, {isStatic:true});
+var wallLeft = Bodies.rectangle(-50, 478, 100, 960, {isStatic:true});
 var spawner = Bodies.rectangle(0, 0, 20, 40, {isStatic: true});
 var colliderTop = Bodies.rectangle(300, -30, 600, 50, {isStatic: true, isSensor: true});
 var collider100 = Bodies.rectangle(300, 800, 30, 20, {isStatic: true, isSensor: true});
