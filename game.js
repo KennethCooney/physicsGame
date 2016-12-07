@@ -1,52 +1,69 @@
 
-//firebase
-  // Initialize Firebase
-  var config = {
-  	apiKey: "AIzaSyDs_psHy8ODUPpLXYJcQsyCZxZ-77A5NdE",
-  	authDomain: "cooindrop.firebaseapp.com",
-  	databaseURL: "https://cooindrop.firebaseio.com",
-  	storageBucket: "cooindrop.appspot.com",
-  	messagingSenderId: "719139779180"
-  };
-  firebase.initializeApp(config);
+// *************** FIREBASE START ***************
+var config = {
+	apiKey: "AIzaSyDs_psHy8ODUPpLXYJcQsyCZxZ-77A5NdE",
+	authDomain: "cooindrop.firebaseapp.com",
+	databaseURL: "https://cooindrop.firebaseio.com",
+	storageBucket: "cooindrop.appspot.com",
+	messagingSenderId: "719139779180"
+};
+firebase.initializeApp(config);
 
-// connect to your Firebase application using your reference URL
-var messageAppReference = firebase.database();
-var messagesReference = firebase.database().ref('users');
+// connect to your Firebase
+var firebaseRef = firebase.database();
+var firebaseUsers = firebase.database().ref('users');
 $(document).ready(function() {
-	console.log(firebase);
-	$('#score-form').submit(function(event) { // post users and scores to firebase
+	//console.log(firebase);
+
+	//var topUserPostsRef = firebaseUsers.orderByChild('score');
+
+	// receive users and scores and upload to firebase
+	$('#score-form').submit(function(event) { 
 		event.preventDefault();
-        //grab user's message
-        var userName = $('#user-name').val();
-        //clear the message input fields
-        $('#user-name').val("");
+        var userName = $('#user-name').val(); //grab user's message
+        $('#user-name').val(""); //clear the message input field
         $('#modal').fadeOut();
-        // console.log(message);
         // send message to firebase
-        messagesReference.push({
-        	name: userName,
-        	score: score
+        firebaseUsers.push({
+        	name: userName, // create name node
+        	score: score // create score node
         });
     });
 
+
+//	var myUserId = firebase.auth().currentUser;
+//	var topUserPostsRef = firebaseRef.orderByChild('score');
+
+	// get user names and scores and post to DOM
 	var messageClass = (function() {
-		function getFanMessages() {
-		//private function
-		messageAppReference.ref("users").on("value", function(results){
+		function getUserNamesScores() {
+		//var orderedByScore = firebaseUsers.orderByChild('score');
+		firebaseRef.ref("users").on("value", function(results){
 			var messages = [];
 			var $messageBoard = $('.user-list');
+			// Get results from the database
 			var allMessages = results.val();
-			for (var msg in allMessages) {
-				console.log(results);
-				var name = allMessages[msg].name;
-				var votes = allMessages[msg].score;
+			// loop through the object and convert to array
+			allMessages = $.map(allMessages, function(value, index) {
+			    return [value];
+			});
+
+			// Sort the messages by score
+			allMessages = allMessages.sort(function(a,b) {return (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0);} ); 
+			
+			// Loops through and adds them to the page
+			allMessages.forEach(function(message){
+				var name = message.name;
+				var votes = message.score;
 				var $messageListElement = $('<li></li>');
 				$messageListElement.html(name);
-				$messageListElement.append('<div class="pull-right">' + votes + '</div>');
+				$messageListElement.append('<div class="score-column">' + votes + '</div>');
 
 				messages.push($messageListElement);
-			}
+				
+			})
+				//console.log(results);
+		
 			$messageBoard.empty();
 			for (var element in messages) {
 				$messageBoard.append(messages[element]);
@@ -54,19 +71,14 @@ $(document).ready(function() {
 		});
 	}
 	return {
-		updateFanMessages: getFanMessages
+		getUserNamesScores: getUserNamesScores
 	}
 })();
-messageClass.updateFanMessages();
+messageClass.getUserNamesScores();
 });
+// *************** FIREBASE END ***************
 
-
-
-
-
-
-
-// Matter.js start ***************
+// *************** MATTER.JS SETUPD START ***************
 // module aliases
 var Engine = Matter.Engine,
 Render = Matter.Render,
@@ -119,12 +131,7 @@ var spinnerA = Bodies.rectangle(270, 480, 45, 10, {isStatic:true});
 var spinnerB = Bodies.rectangle(330, 480, 45, 10, {isStatic:true});
 var spinnerC = Bodies.rectangle(270, 560, 45, 10, {isStatic:true});
 var spinnerD = Bodies.rectangle(330, 560, 45, 10, {isStatic:true});
-var spinnerE = Bodies.rectangle(180, 300, 120, 10, {isStatic:true});
-//var triangleLeft = Bodies.fromVertices(120, 900, [{ x: 0, y: 0 }, { x: 150, y: -75 }, { x: 150, y: 0 }], {isStatic: true, friction: 0, restitution: 0}, [flagInternal=false], [removeCollinear=0.01], [minimumArea=10]);
-//var triangleRight = Bodies.fromVertices(480, 900, [{ x: 0, y: -75 }, { x: 150, y: 0 }, { x: 0, y: 0 }], {isStatic: true, friction: 0, restitution: 0}, [flagInternal=false], [removeCollinear=0.01], [minimumArea=10]);
-
-
-//var triangle = Bodies.fromVertices(300, 850, [{ x: 0, y: 0 }, { x: 300, y: -75 }, { x: 600, y: 0 }], {isStatic: true, friction: 0, restitution: 0}, [flagInternal=false], [removeCollinear=0.01], [minimumArea=10]);
+var spinnerE = Bodies.rectangle(120, 300, 120, 10, {isStatic:true});
 var ground = Bodies.circle(300, 1370, 480, { isStatic: true, friction:0, restitution:0, render: {
 	fillStyle: '#2b2b2b'
 }});
@@ -136,16 +143,12 @@ Engine.run(engine);
 Render.run(render);
 // gravity
 engine.world.gravity.y = 1;
+// *************** MATTER.JS SETUPD END ***************
 
-// *****************************
-
+// *************** CREATE ELEVATORS START ***************
 function createElevatorsY(){
 	var elevatorY = 0;
 
-	// for(var i = 0; i < 8; i++){
-	// 	animateElevatorY();
-	// 	elevatorY += 125;
-	// };
 	for(var i = 0; i < 18; i++){
 		animateElevatorY();
 		elevatorY += 55;
@@ -172,8 +175,9 @@ function createElevatorsY(){
 		});
 	};
 };
+// *************** CREATE ELEVATORS END ***************
 
-// animate spawner back and forth with cosine
+// *************** ANIMATE SPAWNER START ***************
 function animateSpawner(){
 	Matter.Events.on(engine, 'beforeUpdate', function() {
 		Matter.Body.setPosition(spawner, {x: 300 + 240 * Math.cos(engine.timing.timestamp * 0.002),y:40}); // x + width * speed
@@ -184,8 +188,9 @@ function animateSpawner(){
 		Matter.Body.rotate(spinnerE, .01);
 	});
 }
+// *************** ANIMATE SPAWNER END ***************
 
-// spawn new ball on mouse click and at mouse position
+// *************** SPAWN COIN ON CLICK START ***************
 function clickListener(){
 	$('canvas').on('click', function(){
 		if(ballCounter > 0){
@@ -231,8 +236,9 @@ function createBall(){
 	// 	};
 	// });
 };
+// *************** SPAWN COIN ON CLICK END ***************
 
-// create static pins
+// *************** PINS START ***************
 function createPins(){
 
 	var pinStartX = 50;
@@ -268,8 +274,9 @@ function createPins(){
 		pinStartY2 = pinStartY2 + 40;
 	}
 }
+// *************** PINS END ***************
 
-// detect collisions
+// *************** COLLISION START ***************
 Matter.Events.on(engine, 'collisionStart', function(event) {
 	var pairs = event.pairs;
 	$('#scoreDiv').html('Score ' + score);
@@ -280,7 +287,7 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
 
 		if (pair.bodyA === collider100) { // if spawned ball collides with collider100
 			score += 100;
-			ballCounter += 10;
+			ballCounter += 5;
 			collider100.render.fillStyle = '#65f1ff';
 			collider100.render.strokeStyle = '#65f1ff';
 			playAudioSuccess();
@@ -294,14 +301,14 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
 
 		if (pair.bodyA === collider50Left){ // if spawned ball collides with collider100
 			score += 50;
-			ballCounter += 5;
+			ballCounter += 1;
 			collider100.render.fillStyle = '#65f1ff';
 			collider100.render.strokeStyle = '#65f1ff';
 			playAudioSuccess();
 		}
 		if (pair.bodyA === collider50Right){ // if spawned ball collides with collider100
 			score += 50;
-			ballCounter += 5;
+			ballCounter += 1;
 			collider100.render.fillStyle = '#65f1ff';
 			collider100.render.strokeStyle = '#65f1ff';
 			playAudioSuccess();
@@ -317,7 +324,9 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
 
 	}
 });
+// *************** COLLISION END ***************
 
+// *************** AUDIO START ***************
 function playAudioSuccess(){
 	var audioSuccess = document.getElementById("audioSuccess");
 	audioSuccess.play();
@@ -330,7 +339,7 @@ function playAudioThud(){
 	var audioThud = document.getElementById("audioThud");
 	audioThud.play();
 };
-
+// *************** AUDIO END ***************
 
 
 //$('#scoreDiv').html('Score ');
