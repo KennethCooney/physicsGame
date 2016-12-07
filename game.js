@@ -42,14 +42,14 @@ $(document).ready(function() {
 			var allMessages = results.val();
 			// loop through the object and convert to array
 			allMessages = $.map(allMessages, function(value, index) {
-			    return [value];
+				return [value];
 			});
 
 			// Sort the messages by score
 			allMessages = allMessages.sort(function(a,b) {return (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0);} ); 
 			
 			//only show top 10 of array
-			allMessages = allMessages.slice(0,10);
+			allMessages = allMessages.slice(0,20);
 
 			// Loop through array and add items to page
 			allMessages.forEach(function(message){
@@ -61,7 +61,7 @@ $(document).ready(function() {
 
 				messages.push($messageListElement);
 			});
-		
+
 			$messageBoard.empty();
 			for (var element in messages) {
 				$messageBoard.append(messages[element]);
@@ -129,12 +129,13 @@ var spinnerA = Bodies.rectangle(270, 480, 45, 10, {isStatic:true});
 var spinnerB = Bodies.rectangle(330, 480, 45, 10, {isStatic:true});
 var spinnerC = Bodies.rectangle(270, 560, 45, 10, {isStatic:true});
 var spinnerD = Bodies.rectangle(330, 560, 45, 10, {isStatic:true});
-var spinnerE = Bodies.rectangle(120, 300, 120, 10, {isStatic:true});
+var spinnerBigL = Bodies.rectangle(120, 300, 80, 10, {isStatic:true});
+var spinnerBigR = Bodies.rectangle(480, 300, 80, 10, {isStatic:true});
 var ground = Bodies.circle(300, 1370, 480, { isStatic: true, friction:0, restitution:0, render: {
 	fillStyle: '#2b2b2b'
 }});
 
-World.add(engine.world, [ ground, wallRight, wallLeft, spawner, colliderTop, collider100, collider50Left, collider50Right, spinnerA, spinnerB, spinnerC, spinnerD, spinnerE]);
+World.add(engine.world, [ ground, wallRight, wallLeft, spawner, colliderTop, collider100, collider50Left, collider50Right, spinnerA, spinnerB, spinnerC, spinnerD, spinnerBigL, spinnerBigR]);
 // run the engine
 Engine.run(engine); 
 // run the renderer
@@ -147,35 +148,53 @@ engine.world.gravity.y = 1;
 function createElevatorsY(){
 	var elevatorY = 0;
 
-	for(var i = 0; i < 18; i++){
+	for(var i = 0; i < 1; i++){
 		animateElevatorY();
-		elevatorY += 55;
+		elevatorY += 310;
 	};
 
 	function animateElevatorY(){
-		var elevatorRight= Bodies.rectangle(600, elevatorY, 80, 10, {isStatic:true, render: {
-			fillStyle: '#ffffff'
+		var elevatorRight= Bodies.rectangle(400, elevatorY, 80, 20, {isStatic:true, render: {
+			fillStyle: '#2b2b2b',
+			strokeStyle: '#ffffff'
 		}});
-		var elevatorLeft = Bodies.rectangle(0, elevatorY, 80, 10, {isStatic:true, render: {
-			fillStyle: '#ffffff'
+		var elevatorLeft = Bodies.rectangle(200, elevatorY, 80, 20, {isStatic:true, render: {
+			fillStyle: '#2b2b2b',
+			strokeStyle: '#ffffff'
 		}});
-		Matter.Composite.add(engine.world, [elevatorRight, elevatorLeft]);
+		var elevatorUpRight = Bodies.rectangle(500, elevatorY, 80, 20, {isStatic:true, render: {
+			fillStyle: '#2b2b2b',
+			strokeStyle: '#ffffff'
+		}});
+		var elevatorUpLeft = Bodies.rectangle(100, elevatorY, 80, 20, {isStatic:true, render: {
+			fillStyle: '#2b2b2b',
+			strokeStyle: '#ffffff'
+		}});
+		Matter.Composite.add(engine.world, [elevatorRight, elevatorLeft, elevatorUpRight, elevatorUpLeft]);
 
 		Matter.Events.on(engine, "afterUpdate", function(){
-			Matter.Body.setPosition(elevatorRight, {x: 600, y: elevatorRight.position.y - 2}); // speed of elevators
-			Matter.Body.setPosition(elevatorLeft, {x: 0, y: elevatorLeft.position.y - 2}); // speed of elevators
-			if(elevatorRight.position.y < 0){
+			Matter.Body.setPosition(elevatorRight, {x: 400, y: elevatorRight.position.y - 2}); // speed of elevators
+			Matter.Body.setPosition(elevatorLeft, {x: 200, y: elevatorLeft.position.y - 2}); // speed of elevators
+			Matter.Body.setPosition(elevatorUpRight, {x: 100, y: elevatorUpRight.position.y - 1}); // speed of elevators
+			Matter.Body.setPosition(elevatorUpLeft, {x: 500, y: elevatorUpLeft.position.y - 1}); // speed of elevators
+			if(elevatorRight.position.y < -0){
 				Matter.Body.setPosition(elevatorRight, {x: 600, y: 1000});
 			};
-			if(elevatorLeft.position.y < 0){
+			if(elevatorLeft.position.y < -0){
 				Matter.Body.setPosition(elevatorLeft, {x: 600, y: 1000});
+			};
+			if(elevatorUpRight.position.y < -200){
+				Matter.Body.setPosition(elevatorUpRight, {x: 600, y: 1000});
+			};
+			if(elevatorUpLeft.position.y < -200){
+				Matter.Body.setPosition(elevatorUpLeft, {x: 600, y: 1000});
 			};
 		});
 	};
 };
 // *************** CREATE ELEVATORS END ***************
 
-// *************** ANIMATE SPAWNER START ***************
+// *************** ANIMATE OBJECTS START ***************
 function animateSpawner(){
 	Matter.Events.on(engine, 'beforeUpdate', function() {
 		Matter.Body.setPosition(spawner, {x: 300 + 240 * Math.cos(engine.timing.timestamp * 0.002),y:40}); // x + width * speed
@@ -183,57 +202,48 @@ function animateSpawner(){
 		Matter.Body.rotate(spinnerB, .05);
 		Matter.Body.rotate(spinnerC, -.05);
 		Matter.Body.rotate(spinnerD, .05);
-		Matter.Body.rotate(spinnerE, .01);
+		Matter.Body.rotate(spinnerBigL, .01);
+		Matter.Body.rotate(spinnerBigR, -.01);
 	});
 }
 // *************** ANIMATE SPAWNER END ***************
 
 // *************** SPAWN COIN ON CLICK START ***************
 function clickListener(){
-	$('canvas').on('click', function(){
-		if(ballCounter > 0){
-			//createBall();
+
+
+	$('canvas').on('click', function(e){
+		e.preventDefault();
+
+		if (ballCounter === 0){
+			$('#modal').fadeIn();
+		}
+		else if (ballCounter > 0){
+			ballCounter -= 1;
 			playAudioPop();
-			ballCounter --;
+			console.log(ballCounter)
 
 			var ball = Bodies.circle(spawner.position.x, 80, 5, {restitution: .5, continuous: 2, friction:0, render: {
 				fillStyle: '#65f1ff', 
-					strokeStyle: '#65f1ff', // blue #65f1ff
-					lineWidth: 0
+				strokeStyle: '#65f1ff', 
+				lineWidth: 0
 					}}); // (x, y, radius)
 			Matter.Composite.add(engine.world, [ball]);
 
-			Matter.Events.on(engine, "afterUpdate", function(){  // remove if y < 0
+			Matter.Events.on(engine, "beforeUpdate", function(){  // remove if y < 0
 				if(ball.position.y < 0 || ball.position.y > 960){
 					Matter.Composite.remove(engine.world, [ball]);
 				};
 			});
-		};
-
-		if (ballCounter <= 0){
-			console.log('game over');
-			$('#modal').fadeIn();
 		}
 
-		console.log(ballCounter);
 	});
+	
 }; 
 
-function createBall(){
-	var ball = Bodies.circle(spawner.position.x, 80, 5, {restitution: .5, continuous: 2, friction:0, render: {
-		fillStyle: '#65f1ff', 
-					strokeStyle: '#65f1ff', // blue #65f1ff
-					lineWidth: 0
-					}}); // (x, y, radius)
-	Matter.Composite.add(engine.world, [ball]);
 
-	// Matter.Events.on(engine, "afterUpdate", function(){ 
-	// 	if(ball.position.y > 800){
-	// 		console.log('game over');
-	// 		$('#restartGameDiv').fadeIn();
-	// 	};
-	// });
-};
+
+
 // *************** SPAWN COIN ON CLICK END ***************
 
 // *************** PINS START ***************
@@ -357,9 +367,20 @@ $('#restartGameDiv').on('click', function(e) {
 function init(){
 	createPins();
 	clickListener();
-	animateSpawner();
-	//createElevatorsY();
+	//animateSpawner();
+	createElevatorsY();
 };
 
 init();
+
+
+
+
+
+
+
+
+
+
+
 

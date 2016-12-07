@@ -37,19 +37,21 @@ canvas {
     width: 100px;
     display: -webkit-inline-box;
 }
+.introText {
+	width: 330px;
+    margin: auto;
+}
 #restartGameDiv {
-	background: #2b2b2b;
-	position: absolute;
-	top: 15px;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	max-width: 386px;
-	max-height: 516px;
-	margin: auto;
-	opacity: .9;
-
-
+    background: #2b2b2b;
+    position: absolute;
+    top: -3px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    max-width: 415px;
+    max-height: 663px;
+    margin: auto;
+    opacity: .9;
 }
 #restartButton {
 	text-align: center;
@@ -135,7 +137,8 @@ table {
 	border: 1px solid #65f1ff;
 }
 .name-column {
-	width: 70px;
+    width: 70px;
+    color: white;
 }
 .score-column {
 	width: 70px;
