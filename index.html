@@ -25,7 +25,7 @@
 				<canvas id = "myCanvas">
 				</canvas>
 				<div id = "modal">
-					<p2>Game Over. You are out of Snowballs.<br>Enter three letter initials</p2>
+					<p2>Game Over.<br>You are out of Snowballs.<br>Enter three letter initials.</p2>
 					<form id="score-form">
 						<input type="text" id="user-name" name="fname" maxlength="3">
 						<input type="submit" id="user-name" name="fname" class = "play-again" value="Submit">
@@ -33,7 +33,7 @@
 					</input>
 					</form>
 					
-					<div class = "play-again-no">Play again without entering
+					<div class = "play-again-no">Play again without submitting score »
 					</div>
 				</div>
 			</div>
@@ -45,8 +45,8 @@
 					</table>
 					<h2>Instructions</h2>
 					<div class = 'instructions'>
-						<p3>Tap anywhere inside the game to release a Snowball<br>Aim for the ice buckets down below. The center is worth 100 points plus 3 extra Snowballs. The side buckets are worth 50 points plus an extra Snowball.
-						</p3>
+						<p class="instruction-text">Tap anywhere inside the game to release a Snowball<br><br>Aim for the ice buckets down below. The center bucket is worth 100 points plus 3 extra Snowballs. The side buckets are each worth 50 points plus an extra Snowball. <br><br> Game is over when you are out of Snowballs.
+						</p>
 					</div>
 				</div>
 			</div>
@@ -70,6 +70,7 @@
 <audio id="audioSuccess"><source src="audio/success.ogg" type="audio/ogg"></audio>
 <audio id="audioPop"><source src="audio/pop.ogg" type="audio/ogg"></audio>
 <audio id="audioThud"><source src="audio/hover.ogg" type="audio/ogg"></audio>
+<audio id="audioStart"><source src="audio/start.wav" type="audio/ogg"></audio>
 
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="style.css">
