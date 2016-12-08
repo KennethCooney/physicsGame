@@ -148,12 +148,12 @@ var collider100 = Bodies.rectangle(300, 800, 30, 20, {isStatic: true, isSensor: 
 				strokeStyle: '#65f1ff', 
 				lineWidth: 0
 					}}); 
-var collider50Left = Bodies.rectangle(200, 760, 30, 20, {isStatic: true, isSensor: true, render: {
+var collider50Left = Bodies.rectangle(120, 760, 30, 20, {isStatic: true, isSensor: true, render: {
 				fillStyle: '#2b2b2b', 
 				strokeStyle: '#65f1ff', 
 				lineWidth: 0
 					}}); 
-var collider50Right = Bodies.rectangle(400, 760, 30, 20, {isStatic: true, isSensor: true, render: {
+var collider50Right = Bodies.rectangle(480, 760, 30, 20, {isStatic: true, isSensor: true, render: {
 				fillStyle: '#2b2b2b', 
 				strokeStyle: '#65f1ff', 
 				lineWidth: 0
@@ -162,13 +162,14 @@ var spinnerA = Bodies.rectangle(270, 480, 45, 10, {isStatic:true});
 var spinnerB = Bodies.rectangle(330, 480, 45, 10, {isStatic:true});
 var spinnerC = Bodies.rectangle(270, 560, 45, 10, {isStatic:true});
 var spinnerD = Bodies.rectangle(330, 560, 45, 10, {isStatic:true});
-var spinnerBigL = Bodies.rectangle(120, 300, 80, 10, {isStatic:true});
-var spinnerBigR = Bodies.rectangle(480, 300, 80, 10, {isStatic:true});
+var spinnerBigL = Bodies.rectangle(120, 300, 100, 10, {isStatic:true});
+var spinnerBigR = Bodies.rectangle(480, 300, 100, 10, {isStatic:true});
+var spinnerBigC = Bodies.rectangle(300, 500, 80, 10, {isStatic:true});
 var ground = Bodies.circle(300, 1370, 480, { isStatic: true, friction:0, restitution:0, render: {
 	fillStyle: '#2b2b2b'
 }});
 
-World.add(engine.world, [ ground, wallRight, wallLeft, spawner, colliderTop, collider100, collider50Left, collider50Right, spinnerA, spinnerB, spinnerC, spinnerD, spinnerBigL, spinnerBigR]);
+World.add(engine.world, [ ground, wallRight, wallLeft, spawner, colliderTop, collider100, collider50Left, collider50Right, spinnerA, spinnerB, spinnerC, spinnerD, spinnerBigL, spinnerBigR, spinnerBigC]);
 // run the engine
 Engine.run(engine); 
 // run the renderer
@@ -187,7 +188,7 @@ function createElevatorsY(){
 	};
 
 	function animateElevatorY(){
-		var elevatorCenter= Bodies.rectangle(300, elevatorY, 20, 20, {isStatic:true, render: {
+		var elevatorCenter= Bodies.rectangle(300, elevatorY, 40, 20, {isStatic:true, render: {
 			fillStyle: '#2b2b2b',
 			strokeStyle: '#ffffff'
 		}});
@@ -239,12 +240,14 @@ function createElevatorsY(){
 function animateSpawner(){
 	Matter.Events.on(engine, 'beforeUpdate', function() {
 		Matter.Body.setPosition(spawner, {x: 300 + 240 * Math.cos(engine.timing.timestamp * 0.002),y:40}); // x + width * speed
+		Matter.Body.setPosition(spinnerBigC, {x: 300 + 240 * Math.cos(engine.timing.timestamp * 0.001),y:220}); // x + width * speed
 		Matter.Body.rotate(spinnerA, -.05);
 		Matter.Body.rotate(spinnerB, .05);
 		Matter.Body.rotate(spinnerC, -.05);
 		Matter.Body.rotate(spinnerD, .05);
 		Matter.Body.rotate(spinnerBigL, .01);
 		Matter.Body.rotate(spinnerBigR, -.01);
+		//Matter.Body.rotate(spinnerBigC, -.01);
 
 		$('#scoreDiv').html('Score ' + score);
 		$('.coinDiv').html('Snowballs ' + ballCounter);

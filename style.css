@@ -22,12 +22,12 @@ canvas {
 }
 #scoreDiv, .coinDiv {
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: normal;
     letter-spacing: 5px;
     display: inline-block;
     color: #65f1ff;
-    margin: 4px 20px;
+    margin: 2px 20px;
 }
 
 .red {
