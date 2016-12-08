@@ -3,51 +3,66 @@
 <head>
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	
-	<title>COINDROP</title>
+	<title>SNOWDROP</title>
 
 </head>
 
 <body>
 	<div id = "topBar">
-		<h3>COINDROP</h3>
+		<audio autoplay loop><source src="audio/wolves.mp3" type="audio/ogg"></audio>
+		<h3>SNOWDROP</h3>
 		<div id = "scoreDiv">
 		</div>
 		<div class = "coinDiv">
 		</div>
 	</div>
 	<div class = "container">
-		<div class = "row">
-			
+		<row>
 			<div class = "col-md-6">
+				<h2>Tap to drop a Snowball</h2>
 				<canvas id = "myCanvas">
 				</canvas>
+				<div id = "modal">
+					<p2>Game Over. You are out of Snowballs.<br>Enter three letter initials</p2>
+					<form id="score-form">
+						<input type="text" id="user-name" name="fname" maxlength="3">
+						<input type="submit" id="user-name" name="fname" class = "play-again" value="Submit">
+						<!-- <input type = "submit" id="user-name" name="fname" class = "play-again" value="Submit> -->
+					</input>
+					</form>
+					
+					<div class = "play-again-no">Play again without entering
+					</div>
+				</div>
 			</div>
 			<div class = "col-md-6">
 				<div id = "top-scores">
-					<h2>TOP SCORES</h2>
+					
 					<table class = "user-list">
+					<h2>Top Scores</h2>
 					</table>
+					<h2>Instructions</h2>
+					<div class = 'instructions'>
+						<p3>Tap anywhere inside the game to release a Snowball<br>Aim for the ice buckets down below. The center is worth 100 points plus 3 extra Snowballs. The side buckets are worth 50 points plus an extra Snowball.
+						</p3>
+					</div>
 				</div>
 			</div>
-		</div>
+		</row>
 	</div>
 
-	<div id = "restartGameDiv">
-		<h1>COINDROP</h1>
+	<div id = "startGameDiv">
+		<h1>SNOWDROP</h1>
 		<div class = 'introText'>
-			<p>Aim for buckets to score and avoid traps. Beat the high score. Play until coins are gone.</p>
-			<div id = "restartButton">Tap to start
+			<p>Aim for buckets to score and avoid traps. Beat the high score. Play until Snowballs are gone.</p>
+			<div id = "startButton">Tap to start
 			</div>
 		</div>
 	</div>
 
-	<div id = "modal">
-		<p2>Game Over. You are out of coins.<br>Enter three letter initials</p2>
-		<form id="score-form">
-			<input type="text" id="user-name" name="fname" maxlength="3">
-		</form>
-	</div>
+	
 
 </body>
 

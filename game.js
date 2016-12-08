@@ -1,3 +1,5 @@
+(function($, window){
+
 
 // *************** FIREBASE START ***************
 var config = {
@@ -21,8 +23,6 @@ $(document).ready(function() {
 	$('#score-form').submit(function(event) { 
 		event.preventDefault();
         var userName = $('#user-name').val(); //grab user's message
-        $('#user-name').val(""); //clear the message input field
-        $('#modal').fadeOut();
         // send message to firebase
         firebaseUsers.push({
         	name: userName, // create name node
@@ -30,8 +30,12 @@ $(document).ready(function() {
         });
 
         //reset game vars
-		score = 0;
-		ballCounter = 5;
+        score = 0;
+        ballCounter = 5;
+        $('#user-name').val(""); //clear the message input field
+        $('#modal').fadeOut();
+        $('coinDiv').html(ballCounter);
+        playAudioSuccess();
     });
 
 
@@ -57,10 +61,11 @@ $(document).ready(function() {
 
 			// Loop through array and add items to page
 			allMessages.forEach(function(message){
+				var indexArray = allMessages.indexOf(message)+1;
 				var name = message.name;
 				var score = message.score;
 				var $messageListElement = $('<tr><td></td></tr>');
-				$messageListElement.html('<td class = "name-column">' + name + '</td>');
+				$messageListElement.html('<td class = "place-column">' + indexArray + '. </td>' + '<td class = "name-column">' + name + '</td>');
 				$messageListElement.append('<td class="score-column">' + score + '</td>');
 
 				messages.push($messageListElement);
@@ -79,6 +84,14 @@ $(document).ready(function() {
 messageClass.getUserNamesScores();
 });
 // *************** FIREBASE END ***************
+
+
+$('.play-again').on('click', function(){
+	$('#modal').fadeOut();
+	score = 0;
+	ballCounter = 5;
+})
+
 
 // *************** MATTER.JS SETUPD START ***************
 // module aliases
@@ -122,13 +135,29 @@ var render = Render.create({
 Matter.Render.run(render)
 
 // create objects and add to World
-var wallRight = Bodies.rectangle(650, 482, 100, 960, {isStatic:true});
-var wallLeft = Bodies.rectangle(-50, 478, 100, 960, {isStatic:true});
-var spawner = Bodies.rectangle(0, 0, 20, 40, {isStatic: true});
+var wallRight = Bodies.rectangle(655, 482, 100, 960, {isStatic:true});
+var wallLeft = Bodies.rectangle(-55, 478, 100, 960, {isStatic:true});
+var spawner = Bodies.rectangle(0, 0, 20, 40, {isStatic: true, render: {
+				fillStyle: '#2b2b2b', 
+				strokeStyle: '#65f1ff', 
+				lineWidth: 0
+					}}); 
 var colliderTop = Bodies.rectangle(300, -30, 600, 50, {isStatic: true, isSensor: true});
-var collider100 = Bodies.rectangle(300, 800, 30, 20, {isStatic: true, isSensor: true});
-var collider50Left = Bodies.rectangle(200, 760, 30, 20, {isStatic: true, isSensor: true});
-var collider50Right = Bodies.rectangle(400, 760, 30, 20, {isStatic: true, isSensor: true});
+var collider100 = Bodies.rectangle(300, 800, 30, 20, {isStatic: true, isSensor: true, render: {
+				fillStyle: '#2b2b2b', 
+				strokeStyle: '#65f1ff', 
+				lineWidth: 0
+					}}); 
+var collider50Left = Bodies.rectangle(200, 760, 30, 20, {isStatic: true, isSensor: true, render: {
+				fillStyle: '#2b2b2b', 
+				strokeStyle: '#65f1ff', 
+				lineWidth: 0
+					}}); 
+var collider50Right = Bodies.rectangle(400, 760, 30, 20, {isStatic: true, isSensor: true, render: {
+				fillStyle: '#2b2b2b', 
+				strokeStyle: '#65f1ff', 
+				lineWidth: 0
+					}});
 var spinnerA = Bodies.rectangle(270, 480, 45, 10, {isStatic:true});
 var spinnerB = Bodies.rectangle(330, 480, 45, 10, {isStatic:true});
 var spinnerC = Bodies.rectangle(270, 560, 45, 10, {isStatic:true});
@@ -158,6 +187,10 @@ function createElevatorsY(){
 	};
 
 	function animateElevatorY(){
+		var elevatorCenter= Bodies.rectangle(300, elevatorY, 20, 20, {isStatic:true, render: {
+			fillStyle: '#2b2b2b',
+			strokeStyle: '#ffffff'
+		}});
 		var elevatorRight= Bodies.rectangle(400, elevatorY, 80, 20, {isStatic:true, render: {
 			fillStyle: '#2b2b2b',
 			strokeStyle: '#ffffff'
@@ -174,13 +207,17 @@ function createElevatorsY(){
 			fillStyle: '#2b2b2b',
 			strokeStyle: '#ffffff'
 		}});
-		Matter.Composite.add(engine.world, [elevatorRight, elevatorLeft, elevatorUpRight, elevatorUpLeft]);
+		Matter.Composite.add(engine.world, [elevatorCenter, elevatorRight, elevatorLeft, elevatorUpRight, elevatorUpLeft]);
 
 		Matter.Events.on(engine, "afterUpdate", function(){
+			Matter.Body.setPosition(elevatorCenter, {x: 300, y: elevatorCenter.position.y - 2.5}); // speed of elevators
 			Matter.Body.setPosition(elevatorRight, {x: 400, y: elevatorRight.position.y - 2}); // speed of elevators
 			Matter.Body.setPosition(elevatorLeft, {x: 200, y: elevatorLeft.position.y - 2}); // speed of elevators
 			Matter.Body.setPosition(elevatorUpRight, {x: 100, y: elevatorUpRight.position.y - 1}); // speed of elevators
 			Matter.Body.setPosition(elevatorUpLeft, {x: 500, y: elevatorUpLeft.position.y - 1}); // speed of elevators
+			if(elevatorCenter.position.y < -0){
+				Matter.Body.setPosition(elevatorCenter, {x: 600, y: 2000});
+			};
 			if(elevatorRight.position.y < -0){
 				Matter.Body.setPosition(elevatorRight, {x: 600, y: 1000});
 			};
@@ -208,13 +245,15 @@ function animateSpawner(){
 		Matter.Body.rotate(spinnerD, .05);
 		Matter.Body.rotate(spinnerBigL, .01);
 		Matter.Body.rotate(spinnerBigR, -.01);
+
+		$('#scoreDiv').html('Score ' + score);
+		$('.coinDiv').html('Snowballs ' + ballCounter);
 	});
 }
 // *************** ANIMATE SPAWNER END ***************
 
 // *************** SPAWN COIN ON CLICK START ***************
 function clickListener(){
-
 
 	$('canvas').on('click', function(e){
 		e.preventDefault();
@@ -245,7 +284,7 @@ function clickListener(){
 		}
 		if (ballCounter === 1){
 			console.log('is 1')
-				$('.coinDiv').addClass('red');
+			$('.coinDiv').addClass('red');
 		}
 
 	});
@@ -299,7 +338,7 @@ function createPins(){
 Matter.Events.on(engine, 'collisionStart', function(event) {
 	var pairs = event.pairs;
 	$('#scoreDiv').html('Score ' + score);
-	$('.coinDiv').html('Coins ' + ballCounter); 
+	$('.coinDiv').html('Snowballs ' + ballCounter); 
 
 	for (var i = 0, j = pairs.length; i != j; ++i) {
 		var pair = pairs[i];
@@ -314,33 +353,32 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
 
 		}
 		else{
-			collider100.render.fillStyle = 'white';
-			collider100.render.strokeStyle = 'white';
+			collider100.render.fillStyle = '#2b2b2b';
+			collider100.render.strokeStyle = '#65f1ff';
 		};
 
 		if (pair.bodyA === collider50Left){ // if spawned ball collides with collider100
 			score += 50;
 			ballCounter += 1;
-			collider100.render.fillStyle = '#65f1ff';
-			collider100.render.strokeStyle = '#65f1ff';
+			collider50Left.render.fillStyle = '#65f1ff';
+			collider50Left.render.strokeStyle = '#65f1ff';
 			playAudioSuccess();
 		}
+		else{
+			collider50Left.render.fillStyle = '#2b2b2b';
+			collider50Left.render.strokeStyle = '#65f1ff';
+		};
 		if (pair.bodyA === collider50Right){ // if spawned ball collides with collider100
 			score += 50;
 			ballCounter += 1;
-			collider100.render.fillStyle = '#65f1ff';
-			collider100.render.strokeStyle = '#65f1ff';
+			collider50Right.render.fillStyle = '#65f1ff';
+			collider50Right.render.strokeStyle = '#65f1ff';
 			playAudioSuccess();
 		}
-		// if (pair.bodyA === ground) { 
-		// 	Matter.Events.on(engine, "afterUpdate", function(){ 
-		// 		if(ballCounter <= 0){
-		// 			console.log('game over');
-		// 			$('#restartGameDiv').fadeIn();
-		// 		};
-		// 	});
-		// };
-
+		else{
+			collider50Right.render.fillStyle = '#2b2b2b';
+			collider50Right.render.strokeStyle = '#65f1ff';
+		};
 	}
 });
 // *************** COLLISION END ***************
@@ -361,15 +399,14 @@ function playAudioThud(){
 // *************** AUDIO END ***************
 
 
-//$('#scoreDiv').html('Score ');
-$('#scoreDiv').html('Score ' + score);
-$('.coinDiv').html('Coins ' + ballCounter);
+// $('#scoreDiv').html('Score ' + score);
+// $('.coinDiv').html('Snowballs ' + ballCounter);
 
-$('#restartGameDiv').on('click', function(e) {
+$('#startGameDiv').on('click', function(e) {
 	e.preventDefault();
 	score = 0;
 	ballCounter = 5;
-	$('#restartGameDiv').fadeOut();
+	$('#startGameDiv').fadeOut();
 	playAudioSuccess()
 });
 
@@ -388,7 +425,7 @@ init();
 
 
 
-
+}($, window));
 
 
 

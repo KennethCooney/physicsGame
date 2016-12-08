@@ -14,77 +14,47 @@ canvas {
 	max-width: 100vw;
 	max-height: 85vh;
 	margin: auto;
-	margin-top: 20px;
-	border: 3px solid #65f1ff;
+	border: 2px solid #65f1ff;
 }
 #topBar {
-    width: 100%;
-    background: #65f1ff;
+	width: 100%;
+	text-align: center;
+}
+#scoreDiv, .coinDiv {
     text-align: center;
-}
-#scoreDiv {
-    text-align: left;
     font-size: 18px;
-    font-weight: bold;
-    width: 100px;
+    font-weight: normal;
+    letter-spacing: 5px;
     display: inline-block;
+    color: #65f1ff;
+    margin: 4px 20px;
 }
-.coinDiv {
-    text-align: left;
-    padding: 5px 10px;
-    font-size: 18px;
-    font-weight: bold;
-    width: 100px;
-    display: -webkit-inline-box;
-}
+
 .red {
 	color:red;
 }
 .introText {
 	width: 330px;
-    margin: auto;
-}
-#restartGameDiv {
-    background: #2b2b2b;
-    position: absolute;
-    top: -3px;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    max-width: 415px;
-    max-height: 663px;
-    margin: auto;
-    opacity: .9;
-}
-#restartButton {
-	text-align: center;
 	margin: auto;
-	color: white;
-	height: 100px;
-	position: absolute;
-	top: 65px;
-	left: 0;
-	bottom: 0;
-	right: 0;
 }
-#modal {
-	display: none;
+#startGameDiv {
 	background: #2b2b2b;
-	position: absolute;
-	top: -110px;
+	position: fixed;
+	top: 0px;
 	left: 0;
 	bottom: 0;
 	right: 0;
-	max-width: 200px;
-	max-height: 100px;
 	margin: auto;
-	text-align: center;
-	border: solid 2px #65f1ff;
 	opacity: .9;
-	padding: 20px 0px;
-	line-height: 10px;
-
-
+	border: solid 2px #65f1ff;
+	box-shadow: inset 0 0 20px #65f1ff;
+}
+#startButton {
+	text-align: center;
+	margin: auto;
+	color: #65f1ff;
+	height: 50px;
+	width: 200px;
 }
 p {
 	color: white;
@@ -99,26 +69,38 @@ p2 {
 	font-size: 10px;
 	font-weight: 300;
 }
+p3 {
+	color: white;
+	text-align: left;
+	font-size: 10px;
+	font-weight: 300;
+	margin: 30px;
+}
 .col-md-4 {
 
 }
 h1 {
 	color: #65f1ff;
 	text-align: center;
-	font-size: 42px;
-	letter-spacing: 12px;
-	margin-top: 100px;
-	margin-bottom: -20px;
+	font-size: xx-large;
+	letter-spacing: 20px;
+	margin-top: 20%;
+	margin-bottom: 30px;
+}
+h2 {
+	font-size: 18px;
+	color: white;
+	text-align: center;
 }
 h3 {
-	color: #65f1ff;
-	text-align: left;
-	font-size: 12px;
-	letter-spacing: 7px;
-	margin: 0px;
-	position: absolute;
-	left: 10px;
-	bottom: 10px;
+	font-weight: bolder;
+    font-size: 14px;
+    letter-spacing: 14px;
+    padding: 3px 0;
+    margin: 0px;
+    padding-left: 14px;
+    text-align: left;
+    background: #65f1ff;
 }
 #top-scores {
 	color: white;
@@ -136,12 +118,24 @@ table {
 	display: -webkit-box;
 	margin: 10px 0;
 	text-transform: uppercase;
+	padding: 30px;
+	border: 2px solid #65f1ff;
+}
+.instructions {
+	text-align: left;
+	font-size: 12px;
+	display: -webkit-box;
+	margin: 10px 0;
 	padding: 20px;
-	border: 1px solid #65f1ff;
+	border: 2px solid #65f1ff;
+}
+.place-column {
+	color: #65f1ff;
+	padding-right: 7px;
 }
 .name-column {
-    width: 70px;
-    color: white;
+	width: 70px;
+	color: white;
 }
 .score-column {
 	width: 70px;
@@ -154,8 +148,46 @@ input {
 	font-weight: bolder;
 	width: 50px;
 	margin: 20px;
+	margin: 10px 0;
 }
+#modal {
+	display: none;
+	background: #2b2b2b;
+	position: absolute;
+	top: -90px;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	max-width: 270px;
+	max-height: 170px;
+	margin: auto;
+	text-align: center;
+	border: solid 2px #65f1ff;
+	opacity: .9;
+	padding: 20px 0px;
+	line-height: 10px;
+}
+.play-again {
+	color: #333;
+	font-size: 18px;
+	margin-bottom: 6px;
+	background: #65f1ff;
+	border: none;
+	font-size: 12px;
+	width: 90%;
 
+}
+.play-again:hover {
+	color: #333;
+	background: #42bdca;
+}
+.play-again-no {
+	color: #fff;
+	font-size: 10px;
+}
+.play-again-no:hover {
+	color: #ccc;
+}
 
 
 
